@@ -1,4 +1,4 @@
-import { mysqlTable, int, varchar, text, timestamp } from "drizzle-orm/mysql-core";
+import { mysqlTable, serial, varchar, text, timestamp } from "drizzle-orm/mysql-core";
 
 export const usersTable = mysqlTable("users", {
   // Primary Key: Unique ID for every user
