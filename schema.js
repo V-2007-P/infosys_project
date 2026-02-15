@@ -2,7 +2,7 @@ import { mysqlTable, int, varchar, text, timestamp } from "drizzle-orm/mysql-cor
 
 export const usersTable = mysqlTable("users", {
   // Primary Key: Unique ID for every user
-  id: int("id").autoincrement().primaryKey(),
+  id: serial("id").autoincrement().primaryKey(),
   
   // Username: Must be unique so we don't have duplicate accounts
   username: varchar("username", { length: 255 }).notNull().unique(),
