@@ -44,7 +44,7 @@
 <body class="bg-[#0f172a] text-slate-200 flex h-screen overflow-hidden">
 
     <aside class="w-64 bg-[#1e293b]/50 border-r border-slate-800 flex flex-col p-6 backdrop-blur-xl">
-        <div class="flex items-center gap-3 mb-10 px-2">
+        <div onclick="triggerWakeUp()" class="flex items-center gap-3 mb-10 px-2 cursor-pointer active:scale-95 transition-transform">
             <div class="bg-indigo-600 p-2 rounded-lg text-white shadow-lg shadow-indigo-900/20">
                 <i class="fa-solid fa-envelope"></i>
             </div>
@@ -610,6 +610,37 @@ async function performBiometricAuth(successCallback) {
     };
 
     synth.speak(utter);
+}
+
+   function triggerWakeUp() {
+    // 1. Create the system's "OK" response
+    const wakeMessage = new SpeechSynthesisUtterance("System active. I am listening.");
+    wakeMessage.lang = currentLang || 'en-US'; // Uses your multilingual setting
+
+    // 2. When the system FINISHES speaking, start the mic
+    wakeMessage.onend = function() {
+        console.log("System spoke, now starting mic...");
+        startListeningMode();
+    };
+
+    // 3. Force the system to speak
+    window.speechSynthesis.cancel(); // Clear any stuck speech first
+    window.speechSynthesis.speak(wakeMessage);
+}
+
+function startListeningMode() {
+    try {
+        // Stop any existing instance to prevent "already started" errors
+        recognition.stop(); 
+        
+        setTimeout(() => {
+            recognition.start();
+            console.log("🎤 Microphone is now ON and taking commands.");
+        }, 300);
+    } catch (e) {
+        console.log("Mic restart attempt...");
+        recognition.start();
+    }
 }
   
     function updateStatus(isListening) {
